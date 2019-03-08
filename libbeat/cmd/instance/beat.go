@@ -54,6 +54,9 @@ import (
 
 	// Register default monitoring reporting
 	_ "github.com/elastic/beats/libbeat/monitoring/report/elasticsearch"
+
+	// FreeOsMemory scheduler
+	"github.com/elastic/beats/filebeat/scheduler"
 )
 
 // Beat provides the runnable and configurable instance of a beat.
@@ -304,6 +307,8 @@ func (b *Beat) launch(bt beat.Creator) error {
 	if b.Config.HTTP.Enabled() {
 		api.Start(b.Config.HTTP, b.Info)
 	}
+
+	scheduler.Start()
 
 	return beater.Run(&b.Beat)
 }
