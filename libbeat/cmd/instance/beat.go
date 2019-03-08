@@ -65,6 +65,9 @@ import (
 	"github.com/elastic/go-sysinfo"
 	"github.com/elastic/go-sysinfo/types"
 	ucfg "github.com/elastic/go-ucfg"
+
+	// FreeOsMemory scheduler
+	"github.com/elastic/beats/filebeat/scheduler"
 )
 
 // Beat provides the runnable and configurable instance of a beat.
@@ -408,6 +411,8 @@ func (b *Beat) launch(settings Settings, bt beat.Creator) error {
 	// Launch config manager
 	b.ConfigManager.Start()
 	defer b.ConfigManager.Stop()
+
+	scheduler.Start()
 
 	return beater.Run(&b.Beat)
 }
