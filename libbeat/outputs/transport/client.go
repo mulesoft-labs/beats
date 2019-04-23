@@ -226,25 +226,12 @@ func (c *Client) handleError(err error) error {
 
 func (c *Client) Test(d testing.Driver) {
 	d.Run("logstash: "+c.host, func(d testing.Driver) {
-		d.Run("connection", func(d testing.Driver) {
-			netDialer := TestNetDialer(d, c.config.Timeout)
-			_, err := netDialer.Dial("tcp", c.host)
-			d.Fatal("dial up", err)
-		})
-
-		if c.config.TLS == nil {
-			d.Warn("TLS", "secure connection disabled")
-		} else {
-			d.Run("TLS", func(d testing.Driver) {
-				netDialer := NetDialer(c.config.Timeout)
-				tlsDialer, err := TestTLSDialer(d, netDialer, c.config.TLS, c.config.Timeout)
-				_, err = tlsDialer.Dial("tcp", c.host)
-				d.Fatal("dial up", err)
-			})
+		test := "Connect to ingest"
+		if len(c.config.Proxy.URL) > 0 {
+			test = "Connect to ingest (proxy=" + c.config.Proxy.URL + ")"
 		}
-
 		err := c.Connect()
-		d.Fatal("talk to server", err)
+		d.Fatal(test, err)
 	})
 }
 
