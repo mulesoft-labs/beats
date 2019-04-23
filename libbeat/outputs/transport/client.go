@@ -226,9 +226,9 @@ func (c *Client) handleError(err error) error {
 
 func (c *Client) Test(d testing.Driver) {
 	d.Run("logstash: "+c.host, func(d testing.Driver) {
-		test := "Connect to ingest"
+		test := "Connect to logstash"
 		if len(c.config.Proxy.URL) > 0 {
-			test = "Connect to ingest (proxy=" + c.config.Proxy.URL + ")"
+			test = "Connect to logstash (proxy=" + c.config.Proxy.URL + ")"
 		}
 		err := c.Connect()
 		d.Fatal(test, err)
